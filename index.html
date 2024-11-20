@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taylor Swift Lyric Trivia</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #fbe5e7; color: #333; padding: 20px; }
+        h1 { color: #d62839; }
+        button { padding: 10px 20px; margin: 10px; background-color: #ffcad4; border: none; cursor: pointer; }
+        button:hover { background-color: #ff99ab; }
+        #question, #score { font-size: 1.2em; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Taylor Swift Lyric Trivia</h1>
+    <div id="game">
+        <p id="question">"I remember it all too well..."</p>
+        <button onclick="checkAnswer('All Too Well')">All Too Well</button>
+        <button onclick="checkAnswer('Lover')">Lover</button>
+        <button onclick="checkAnswer('Red')">Red</button>
+        <button onclick="checkAnswer('Cardigan')">Cardigan</button>
+    </div>
+    <div id="result" style="display:none;">
+        <p id="score"></p>
+        <button onclick="restartGame()">Play Again</button>
+        <button onclick="shareScore()">Share Score</button>
+    </div>
+    <script>
+        let score = 0;
+        const questions = [
+            { lyric: '"I remember it all too well..."', answer: 'All Too Well' },
+            { lyric: '"You belong with me."', answer: 'You Belong With Me' },
+            { lyric: '"I don’t know about you, but I’m feeling 22."', answer: '22' },
+        ];
+        let currentQuestion = 0;
+
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                document.getElementById('question').textContent = questions[currentQuestion].lyric;
+                document.querySelectorAll('button').forEach((button, index) => {
+                    button.textContent = Object.values(questions[currentQuestion])[index + 1];
+                });
+            } else {
+                endGame();
+            }
+        }
+
+        function checkAnswer(answer) {
+            if (answer === questions[currentQuestion].answer) score += 10;
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function endGame() {
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('score').textContent = `Your score is: ${score}`;
+        }
+
+        function restartGame() {
+            score = 0;
+            currentQuestion = 0;
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            showQuestion();
+        }
+
+        function shareScore() {
+            const shareURL = `${window.location.href}?score=${score}`;
+            navigator.clipboard.writeText(shareURL).then(() => {
+                alert('Score link copied! Share it with friends: ' + shareURL);
+            });
+        }
+
+        // Initialize the game
+        showQuestion();
+    </script>
+</body>
+</html>
